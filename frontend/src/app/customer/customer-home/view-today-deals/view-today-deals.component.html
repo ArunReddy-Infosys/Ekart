@@ -1,0 +1,87 @@
+<div>
+  <div class="text-center table-responsive table-border" *ngIf="dealList.length!=0 && display==false">
+      <h3 class="title">Today Deals</h3>
+
+      <table class="table text-center">
+          <thead>
+              <tr>
+                  <th style="text-align: center">Product Image</th>
+                  <th style="text-align: center">Product Name</th>
+                  <th style="text-align: center">Brand</th>
+                  <th style="text-align: center">Price</th>
+                  <th style="text-align: center">Discount</th>
+                  <th style="text-align: center">Deal Discount</th>
+                  <th style="text-align: center">Deal Start-Time</th>
+                  <th style="text-align: center">Deal End-Time</th>
+                  <th style="text-align: center">Deal Status</th>
+              </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let deal of dealList | paginate: { itemsPerPage: count, currentPage: p}">
+                <td>
+                  <img [src]="'assets/resources/'+ deal.product.productId+'.jpg'" width="50" height="50" class="img-responsive center-block"
+                    alt="Image Not Found" onError="this.src='assets/resources/404.png'">
+                </td>
+      <td><a routerLink="." (click)="viewProductDetails(deal.product)">{{deal.product.name}}</a></td>
+                <td>{{deal.product.brand}}</td>
+                <td>{{deal.product.price|currency: 'INR':'symbol-narrow'}}</td>
+                <td>{{deal.product.discount}}%</td>
+                <td>{{deal.dealDiscount}}%</td>
+                <td>{{deal.dealStart|date :'dd/MM/yyyy, HH:mm'}}</td>
+                <td>{{deal.dealEnd|date :'dd/MM/yyyy, HH:mm'}}</td>
+                <td><label>{{deal.dealStatus}}</label></td>
+              </tr>
+      </tbody>
+      </table>
+      <div class="text-center">
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
+     
+      <div *ngIf="errorMessage!='' && successMessage!=''">
+        <div class="error-message text-center">{{errorMessage}}</div>
+        <div class="success-message text-center">{{successMessage}}</div>
+    </div>
+      </div>
+      
+      <div class="text-center" *ngIf="dealList.length ==0">
+        <h5 class="error-message">No deals available</h5>
+      </div>
+      </div>
+      <div *ngIf="display==true">
+            <div class="col-md-8 offset-md-2 form-bg-light">
+            <table class="table table-responsive">
+        
+                <tr>
+                    <th>Product Id</th>
+                    <td>{{displayProduct.productId}}</td>
+                </tr>
+                <tr>
+                  <th>Product Name</th>
+                  <td>{{displayProduct.name}}</td>
+              </tr>
+                <tr>
+                    <th>Product Description</th>
+                    <td>{{displayProduct.description}}</td>
+                </tr>
+                <tr>
+                    <th>Category</th>
+                    <td>{{displayProduct.category}}</td>
+                </tr>
+                <tr>
+                    <th>Brand</th>
+                    <td>{{displayProduct.brand}}</td>
+                </tr>
+                <tr>
+                    <th>Price</th>
+                    <td>{{displayProduct.price|currency: 'INR':'symbol-narrow'}}</td>
+                </tr>
+                <tr>
+                    <th>Discount</th>
+                    <td>{{displayProduct.discount}}%</td>
+                </tr>
+            </table>
+            <div class="text-center">
+                    <div><a [routerLink]="" (click)="display=false"class="btn btn-primary">Back</a></div>
+             </div> 
+        </div>      
+      </div>

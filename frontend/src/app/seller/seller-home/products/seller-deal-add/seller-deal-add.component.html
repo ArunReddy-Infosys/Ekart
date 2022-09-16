@@ -1,0 +1,112 @@
+<div class="container">
+    <div class="text-center table-responsive table-border" *ngIf="productList!=0  && !(addDealClick)">
+        <h3 class="title">Add to Deal</h3>
+  
+        <table class="table text-center">
+            <thead>
+                <tr>
+                    <th style="text-align: center">Product Image</th>
+                    <th style="text-align: center">Product Id</th>
+                    <th style="text-align: center">Product Name</th>
+                    <th style="text-align: center">Category</th>
+                    <th style="text-align: center">Brand</th>
+                    <th style="text-align: center">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let product of productList|paginate :{itemsPerPage:count, currentPage:p}">
+                    <td>
+                      <img [src]="'assets/resources/'+ product.productId+'.jpg'" width="50" height="50" class="img-responsive center-block"
+                        alt="Image Not Found" onError="this.src='assets/resources/404.png'">
+                    </td>
+                    <td>{{product.productId}}</td>
+                    <td>{{product.name}}</td>
+                    <td>{{product.category}}</td>
+                    <td>{{product.brand}}</td> 
+                    <td>
+                       <div (click)='showDealForm(product)'><button class="btn btn-primary" >Add to Deal </button></div>
+                     </td>
+                </tr>
+            </tbody>
+        </table>
+  
+        <div class="text-center">
+          <pagination-controls (pageChange)="p=$event"></pagination-controls>
+      </div>
+    
+        <div class="text-center" *ngIf="productList.length ==0">
+          <h5 class="error-message">No products available</h5>
+        </div>
+      </div>
+      
+  
+  </div>
+  
+  
+        <div *ngIf="addDealClick">
+          <div class="form-bg-light table-responsive col-md-8 offset-md-2 ">
+              <h3 class="title">Deal Details</h3>
+              <br>
+              <form [formGroup]="dealAddForm" (ngSubmit)="addDealDetails()">
+                  <table class="table table-condensed">
+                  
+          <tr>
+              <th>Deal Start Time:</th>
+              <td>
+                  <input type="datetime-local" class="form-control" formControlName="dealStart" />
+                  <div class=" alert-danger" *ngIf="dealAddForm.get('dealStart').invalid && dealAddForm.get('dealStart').touched">Deal start time is mandatory</div>
+              </td>
+          </tr>
+          
+          <tr>
+              <th>Deal End Time:</th>
+              <td>
+                  <input type="datetime-local" class="form-control" formControlName="dealEnd" />
+                  <div class=" alert-danger" *ngIf="dealAddForm.get('dealEnd').invalid && dealAddForm.get('dealEnd').touched">Deal End Time is mandatory</div>
+              </td>
+          </tr>
+          <tr>
+              <th>Deal Discount in %:</th>
+              <td>
+                  <input type="number" class="form-control" formControlName="dealDiscount" />
+                      <div class="alert-danger" *ngIf="dealAddForm.get('dealDiscount').invalid && dealAddForm.get('dealDiscount').touched">Deal Discount is mandatory
+                          and it should be between 0 and 100
+                      </div>
+                              
+                  </td>
+          </tr>
+      </table>
+         <div>
+             <div class="row">
+              <button type="submit"  [disabled]="!dealAddForm.valid" class="col-md-4 offset-md-4 btn btn-success form-button">Click to Add
+                      </button>
+              <button type="button" (click)="reload()" class="btn btn-warning">Cancel</button>
+              </div>
+          </div>
+          </form>
+      
+  
+      <div class="text-center" *ngIf="(message!='' && productDetails!=null)">
+          <div class="card-bg-light center text-dark w-85 ">
+              <div class="row">
+                  <div class="col card-block offset-1">
+                      <br>
+                    <span style="font-weight: bolder;">Product ID : </span>{{productDetails.productId}}
+                      <br>
+                   <span style="font-weight: bolder;">Product Name : </span>{{productDetails.name}}
+                     <br>
+                  </div>
+              </div>
+           <div class="success-message text-center font-weight-bold">{{message}}</div>
+          </div>
+         </div>
+     
+         <div *ngIf="errorMessage!=''">
+            <div class="error-message text-center font-weight-bold">&nbsp; Cannot be Added</div>
+         <div class="error-message text-center font-weight-bold"> {{errorMessage}}</div>
+      </div>
+  </div>
+</div>
+  
+  
+  
